@@ -1,0 +1,79 @@
+helm init --upgrade
+
+kubectl create serviceaccount --namespace kube-system tiller
+
+kubectl create clusterrolebinding tiller-cluster-rule \
+   --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+kubectl patch deploy --namespace kube-system tiller-deploy \
+   -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
+
+   helm install stable/mysql
+
+
+
+   NOTES:
+MySQL can be accessed via port 3306 on the following DNS name from within your cluster:
+inky-manta-mysql.default.svc.cluster.local
+
+To get your root password run:
+
+    MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace default inky-manta-mysql -o jsonpath="{.data.mysql-root-password}" | base64 --decode; echo)
+
+To connect to your database:
+
+1. Run an Ubuntu pod that you can use as a client:
+
+    kubectl run -i --tty ubuntu --image=ubuntu:16.04 --restart=Never -- bash -il
+
+2. Install the mysql client:
+
+    $ apt-get update && apt-get install mysql-client -y
+
+3. Connect using the mysql cli, then provide your password:
+    $ mysql -h inky-manta-mysql -p
+
+To connect to your database directly from outside the K8s cluster:
+    MYSQL_HOST=127.0.0.1
+    MYSQL_PORT=3306
+
+    # Execute the following commands to route the connection:
+    export POD_NAME=$(kubectl get pods --namespace default -l "app=inky-manta-mysql" -o jsonpath="{.items[0].metadata.name}")
+    kubectl port-forward $POD_NAME 3306:3306
+
+    mysql -h ${MYSQL_HOST} -P${MYSQL_PORT} -u root -p${MYSQL_ROOT_PASSWORD}
+
+
+    kubectl get secret --namespace default inky-manta-mysql -o jsonpath="{.data.mysql-root-password}" | base64 --decode; echo
+DBTzmbAikO
+
+
+
+Some systems — notably MacOS — will give you an error:
+
+
+This is because of an error in base64 that adds an extraneous character. In this case, you will have to extract the password manually. Basically, we’re going to execute the same steps as this line of code, but one at a time.
+
+Start by looking at the Secrets that Kubernetes is managing:
+
+
+kubectl get secrets
+
+kubectl get secret inky-manta-mysql -o yaml
+
+
+echo "REJUem1iQWlrTw==" | base64 --decode
+DBTzmbAikO
+
+
+./mysql -h linky-manta-mysql.default.svc.cluster.local -p
+
+
+kubectl run -i --tty ubuntu --image=ubuntu:16.04 --restart=Never 
+
+
+kubectl attach ubuntu -i -t
+
+apt-get update && apt-get install mysql-client -y
+
+mysql -h inky-manta-mysql -p
+
