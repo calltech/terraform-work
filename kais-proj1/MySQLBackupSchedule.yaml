@@ -1,0 +1,23 @@
+
+# This minifist will take backup every 1hr and upload it to Oracle cloud storage. 
+apiVersion: "mysql.oracle.com/v1"
+kind: MySQLBackupSchedule
+metadata:
+  name: mysql-backup-schedule
+spec:
+  schedule: '30 * * * *'
+  backupTemplate:
+    executor:
+      provider: mysqldump
+      databases:
+        - test
+    storage:
+      provider: s3  
+      secretRef:
+        name: s3-credentials
+      config:
+        endpoint: x.compat.objectstorage.y.oraclecloud.com
+        region: ociregion
+        bucket: mybucket
+    clusterRef:
+      name: mysql-cluster

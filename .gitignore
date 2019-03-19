@@ -1,0 +1,7 @@
+# Ignoring machine generated files and credentials files from being uploaded to the guthub.
+cred/
+node_modules/
+dist/
+backend/target/
+.terraform/
+vm-configuration.yaml

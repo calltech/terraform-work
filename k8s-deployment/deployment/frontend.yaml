@@ -1,0 +1,34 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: r-demo
+  namespace: default
+spec:
+  replicas: 2
+  strategy: # Rolling updates strategy start here
+  # type: RollingUpdate
+  # rollingUpdate:
+  #   maxSurge: 1 # Max surge is the number of pods will be created during the  update process at once.
+  #   maxUnavailable: 25% # This is the number of pods will be unavailable during the rolling  new updates
+  selector:
+    matchLabels:
+      app: r-demo
+  template:
+    metadata:
+      labels:
+        app: r-demo
+    spec:
+      containers:
+        - image: programmer26/demo-app-name-0
+          imagePullPolicy: Always # Keeping the image pull policy Always to make sure the latest version of image being pulled out of the repository.
+          name: r-demo
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: 80
+          #     initialDelaySeconds: 5 # This is the number of seconds after the container has started and before the rediness probes are initiated.
+          #     periodSeconds: 5 # How often the probe is bing performed, default is 10 sec. Min is 1 second.
+          #     successThreshold: 1 # Minimum consective success for probe to considered successful.

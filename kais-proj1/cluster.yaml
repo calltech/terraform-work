@@ -1,0 +1,29 @@
+apiVersion: mysql.oracle.com/v1alpha1
+kind: MySQLCluster
+metadata:
+  name: mysql-cluster-with-volume
+  namespace: kais-namespace
+spec:
+  members: 2
+  rootPasswordSecret:
+    name: mysql-root-user-secret
+  volumeClaimTemplate:
+    metadata:
+      name: data
+    spec:
+      storageClassName: manual
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 2Gi
+  backupVolumeClaimTemplate:
+    metadata:
+      name: backup-data
+    spec:
+      storageClassName: manual
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 2Gi

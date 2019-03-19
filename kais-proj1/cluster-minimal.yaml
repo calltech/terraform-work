@@ -1,0 +1,11 @@
+apiVersion: mysql.oracle.com/v1alpha1
+kind: Cluster
+metadata:
+  name: yu-cluster
+spec:
+  members: 3
+  multiMaster: false
+  rootPasswordSecret:
+    name: mysql-root-password
+  config:
+    name: your-mycnf

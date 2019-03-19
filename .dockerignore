@@ -1,0 +1,12 @@
+dist/*
+node_modules/*
+ansible/*
+backend/*
+cred/*
+k8s-deployment/*
+postgresql/*
+terraform-k8s/*
+terraform-vm/*
+Jenkinsfile
+.gitignore
+README.md
